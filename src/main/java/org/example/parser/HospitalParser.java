@@ -10,7 +10,7 @@ public class HospitalParser implements Parser<Hospital>{
 
         String[] splitedFiles = files.split(",");
 
-        int emergency = Integer.parseInt(splitedFiles[6].replaceAll("\"", ""));
+        int emergency = Integer.parseInt(splitedFiles[6]);
 
         return new Hospital(splitedFiles[0], splitedFiles[1], splitedFiles[2],
                 emergency, splitedFiles[10], null);
