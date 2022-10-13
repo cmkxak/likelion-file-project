@@ -26,7 +26,7 @@ public class Hospital {
     }
 
     public String getId() {
-        return id;
+        return id.replace("\"", "");
     }
 
     public void setId(String id) {
