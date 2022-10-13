@@ -29,6 +29,30 @@ public class Hospital {
         return id.replace("\"", "");
     }
 
+    public String getAddress() {
+        return address;
+    }
+
+    public String getDistrict() {
+        return district;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getSubDivision() {
+        return subDivision;
+    }
+
+    public int getEmergencyRoom() {
+        return emergencyRoom;
+    }
+
     public void setId(String id) {
         this.id = id;
     }
