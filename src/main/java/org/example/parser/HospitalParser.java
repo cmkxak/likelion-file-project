@@ -3,17 +3,16 @@ package org.example.parser;
 import org.example.domain.Hospital;
 
 public class HospitalParser implements Parser<Hospital>{
-    private String replaceAllQuot(String str){
-        return str.replaceAll("\"" , "");
-    }
 
     @Override
     public Hospital parse(String fileContents) {
-        String[] split = fileContents.split(",");
+        String files = fileContents.replaceAll("\"", "");
 
-        int emergency = Integer.parseInt(split[6].replaceAll("\"", ""));
+        String[] splitedFiles = files.split(",");
 
-        return new Hospital(replaceAllQuot(split[0]), replaceAllQuot(split[1]), replaceAllQuot(split[2]),
-                emergency, replaceAllQuot(split[10]), null);
+        int emergency = Integer.parseInt(splitedFiles[6].replaceAll("\"", ""));
+
+        return new Hospital(splitedFiles[0], splitedFiles[1], splitedFiles[2],
+                emergency, splitedFiles[10], null);
     }
 }
