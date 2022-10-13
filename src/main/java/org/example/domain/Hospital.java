@@ -79,7 +79,7 @@ public class Hospital {
     public String toString() {
         return "\"" + this.id + "\"" + "," + "\"" + this.address + "\"" + "," + "\""
                 + this.district + "\"" + "," + "\"" + this.category + "\"" + "," + this.emergencyRoom + "," + "\"" +
-                this.name + "\"" + "," + "\"" + this.subDivision + "\"" ;
+                this.name + "\"" + "," + "\"" + this.subDivision + "\"";
     }
 
 }
