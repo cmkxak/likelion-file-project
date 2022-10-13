@@ -25,5 +25,15 @@ class HospitalParserTest {
         Hospital parse = hospitalParser.parse(str2);
         assertEquals(address, parse.getAddress());
     }
+    @Test
+    void district(){
+        String district = "";
+        HospitalParser hospitalParser = new HospitalParser();
+
+        Hospital hospitalParse = hospitalParser.parse(str2);
+        assertEquals("서울특별시 금천구", hospitalParse.getDistrict());
+    }
+
+
 
 }
