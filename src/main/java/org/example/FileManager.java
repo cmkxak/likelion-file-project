@@ -43,7 +43,7 @@ public class FileManager<T> {
         try{
             BufferedWriter br = new BufferedWriter(new FileWriter(file));
             for (T content : fileContents) {
-                br.write("INSERT INTO seoul_hospital values (" + String.valueOf(content) + ");\n"  );
+                br.write(parser.formatString(content));
             }
             br.close();
         }catch (IOException e){
