@@ -7,6 +7,6 @@ public class SqlParser implements Parser<Hospital>{
     public Hospital parse(String fileContents) {
         String[] split = fileContents.split(",");
 
-        return new Hospital(split[0],split[1], split[3], Integer.parseInt(split[4]), split[5], split[6]);
+        return new Hospital(split[0],split[1], split[3], Integer.parseInt(split[4]), split[5]);
     }
 }
