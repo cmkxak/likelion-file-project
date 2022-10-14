@@ -75,11 +75,24 @@ public class Hospital {
         }
     }
 
+    public String getSqlInsertQuery() {
+        String sql = String.format("INSERT INTO `likelion-db`.`seoul_hospital`\n" +
+                "(`id`,`address`,`district`,`category`,`emergency_room`,`name`,`subdivision`)\n"+
+                "VALUES\n" +
+                "(\"%s\",\n" +
+                "\"%s\",\n" +
+                "\"%s\",\n" +
+                "\"%s\",\n" +
+                "%d,\n" +
+                "\"%s\",\n" +
+                "\"%s\");", this.id, this.address, this.district, this.category, this.emergencyRoom, this.name, this.subDivision);
+        return sql;
+    }
+
     @Override
     public String toString() {
         return "\"" + this.id + "\"" + "," + "\"" + this.address + "\"" + "," + "\""
                 + this.district + "\"" + "," + "\"" + this.category + "\"" + "," + this.emergencyRoom + "," + "\"" +
                 this.name + "\"" + "," + "\"" + this.subDivision + "\"";
     }
-
 }
