@@ -21,8 +21,6 @@ public class UserDao {
 
     public void add(){
         try{
-            FileManager fileManager = new FileManager(new SqlParser());
-
             //jdbc 로드
             Class.forName(jdbcDriver);
 
