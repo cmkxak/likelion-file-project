@@ -1,9 +1,12 @@
 package org.example.dao;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import org.example.FileManager;
+import org.example.domain.User;
+import org.example.parser.SqlParser;
+
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class UserDao {
@@ -18,6 +21,8 @@ public class UserDao {
 
     public void add(){
         try{
+            FileManager fileManager = new FileManager(new SqlParser());
+
             //jdbc 로드
             Class.forName(jdbcDriver);
 
@@ -43,35 +48,65 @@ public class UserDao {
         }
     }
 
-    public void select(){
+    public User getUser(String id){
+        User user;
+
         try{
             Class.forName(jdbcDriver);
 
             Connection c = DriverManager.getConnection(dbHost, dbUser, dbPassword);
 
-            PreparedStatement ps = c.prepareStatement("select * from users where id = \"1\"");
+            PreparedStatement pstmt = c.prepareStatement("select * from users where id = ?");
 
-            //결과 가져오기
-            ResultSet rs = ps.executeQuery();
+            pstmt.setString(1, id);
+            ResultSet rs = pstmt.executeQuery();
+            
+            rs.next(); //하나 읽어오기
 
-            while(rs.next()){
-                System.out.printf("%s\t%s\t%s\t\n"
-                        ,rs.getString("id")
-                        ,rs.getString("name")
-                        ,rs.getString("password"));
-            }
+            user = new User(rs.getString("id"), rs.getString("name"), rs.getString("password"));
 
-            ps.close();
+            rs.close();
+            pstmt.close();
             c.close();
 
         }catch (Exception e){
             throw new RuntimeException(e);
         }
+        return user;
+    }
+
+    public List<User> findAll(){
+        List<User> userList = new ArrayList<>();
+        try {
+            Class.forName(jdbcDriver);
+
+            Connection c = DriverManager.getConnection(dbHost, dbUser, dbPassword);
+            Statement statement = c.createStatement();
+
+            ResultSet rs = statement.executeQuery("select * from users");
+
+            while (rs.next()) {
+                User user = new User(rs.getString("id"),
+                        rs.getString("name"), rs.getString("password"));
+                userList.add(user);
+            }
+
+            rs.close();
+            statement.close();
+            c.close();
+        }catch(Exception e){
+                throw new RuntimeException(e);
+            }
+        return userList;
     }
 
     public static void main(String[] args) {
         UserDao userDao = new UserDao();
-//        userDao.add();
-        userDao.select();
+
+        List<User> allofUser = userDao.findAll();
+        for (User user : allofUser) {
+            System.out.println(user.getName());
+        }
+
     }
 }
