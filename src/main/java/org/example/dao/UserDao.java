@@ -25,7 +25,6 @@ public class UserDao {
             Class.forName(jdbcDriver);
 
             //1. 커넥션 생성
-            //password와 source는 요거를 넣지 마세요.
             Connection c = DriverManager.getConnection(dbHost, dbUser, dbPassword);
 
             //2. 쿼리 작성
@@ -46,7 +45,7 @@ public class UserDao {
         }
     }
 
-    public User getUser(String id){
+    public User findById(String id){
         User user;
 
         try{
