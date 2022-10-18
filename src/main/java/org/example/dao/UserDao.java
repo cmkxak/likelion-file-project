@@ -1,6 +1,7 @@
 package org.example.dao;
 
 import org.example.FileManager;
+import org.example.connection.ConnectionMaker;
 import org.example.domain.User;
 import org.example.parser.SqlParser;
 
@@ -12,14 +13,18 @@ import java.util.Map;
 public class UserDao {
 
     private final String jdbcDriver = "com.mysql.cj.jdbc.Driver";
-
+    private ConnectionMaker connectionMaker;
     //보안을 위해 설정한 환경변수 값들을 map으로 가져오기
     private Map<String, String> env = System.getenv();
     private String dbHost = env.get("DB_HOST");
     private String dbUser = env.get("DB_USER");
     private String dbPassword = env.get("DB_PASSWORD");
 
-    public void add(){
+    public UserDao(ConnectionMaker connectionMaker) {
+        this.connectionMaker = connectionMaker;
+    }
+
+    public void add(User user){
         try{
             //jdbc 로드
             Class.forName(jdbcDriver);
@@ -29,9 +34,9 @@ public class UserDao {
 
             //2. 쿼리 작성
             PreparedStatement ps = c.prepareStatement("INSERT INTO users values(?,?,?)");
-            ps.setString(1, "2");
-            ps.setString(2, "김길동");
-            ps.setString(3, "password");
+            ps.setString(1, user.getId());
+            ps.setString(2, user.getName());
+            ps.setString(3, user.getPassword());
 
             //3. 쿼리 실행
             ps.executeUpdate();
@@ -49,9 +54,7 @@ public class UserDao {
         User user;
 
         try{
-            Class.forName(jdbcDriver);
-
-            Connection c = DriverManager.getConnection(dbHost, dbUser, dbPassword);
+            Connection c = connectionMaker.getConnection();
 
             PreparedStatement pstmt = c.prepareStatement("select * from users where id = ?");
 
@@ -75,9 +78,8 @@ public class UserDao {
     public List<User> findAll(){
         List<User> userList = new ArrayList<>();
         try {
-            Class.forName(jdbcDriver);
+            Connection c = connectionMaker.getConnection();
 
-            Connection c = DriverManager.getConnection(dbHost, dbUser, dbPassword);
             Statement statement = c.createStatement();
 
             ResultSet rs = statement.executeQuery("select * from users");
@@ -98,7 +100,9 @@ public class UserDao {
     }
 
     public static void main(String[] args) {
-        UserDao userDao = new UserDao();
+        UserDao userDao = new UserDao(new ConnectionMaker());
+        //Constructor로 user 추가
+        userDao.add(new User("3", "정형돈", "12345677"));
 
         List<User> allofUser = userDao.findAll();
         for (User user : allofUser) {
