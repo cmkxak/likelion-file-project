@@ -1,7 +1,6 @@
 package org.example.dao;
 
 import org.example.FileManager;
-import org.example.connection.ConnectionMaker;
 import org.example.domain.User;
 import org.example.parser.SqlParser;
 
@@ -13,25 +12,23 @@ import java.util.Map;
 public class UserDao {
 
     private final String jdbcDriver = "com.mysql.cj.jdbc.Driver";
-    private ConnectionMaker connectionMaker;
+
     //보안을 위해 설정한 환경변수 값들을 map으로 가져오기
     private Map<String, String> env = System.getenv();
     private String dbHost = env.get("DB_HOST");
     private String dbUser = env.get("DB_USER");
     private String dbPassword = env.get("DB_PASSWORD");
 
-    public UserDao(ConnectionMaker connectionMaker) {
-        this.connectionMaker = connectionMaker;
+    private Connection makeConnection() throws ClassNotFoundException, SQLException {
+        Class.forName(jdbcDriver);
+        Connection connection = DriverManager.getConnection(dbHost, dbUser, dbPassword);
+        return connection;
     }
 
     public void add(User user){
         try{
             //jdbc 로드
-            Class.forName(jdbcDriver);
-
-            //1. 커넥션 생성
-            Connection c = DriverManager.getConnection(dbHost, dbUser, dbPassword);
-
+            Connection c = makeConnection();
             //2. 쿼리 작성
             PreparedStatement ps = c.prepareStatement("INSERT INTO users values(?,?,?)");
             ps.setString(1, user.getId());
@@ -54,7 +51,7 @@ public class UserDao {
         User user;
 
         try{
-            Connection c = connectionMaker.getConnection();
+            Connection c = makeConnection();
 
             PreparedStatement pstmt = c.prepareStatement("select * from users where id = ?");
 
@@ -78,7 +75,7 @@ public class UserDao {
     public List<User> findAll(){
         List<User> userList = new ArrayList<>();
         try {
-            Connection c = connectionMaker.getConnection();
+            Connection c = makeConnection();
 
             Statement statement = c.createStatement();
 
@@ -100,9 +97,9 @@ public class UserDao {
     }
 
     public static void main(String[] args) {
-        UserDao userDao = new UserDao(new ConnectionMaker());
+        UserDao userDao = new UserDao();
         //Constructor로 user 추가
-        userDao.add(new User("3", "정형돈", "12345677"));
+        userDao.add(new User("5", "유재석", "12345677"));
 
         List<User> allofUser = userDao.findAll();
         for (User user : allofUser) {
