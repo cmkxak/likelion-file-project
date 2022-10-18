@@ -7,16 +7,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserDao {
-    private UserDaoAbstract abstractUserDao;
+    private ConnectionMaker connectionMaker;
 
-    public UserDao(UserDaoAbstract userDaoAbstract) {
-        this.abstractUserDao = userDaoAbstract;
+    public UserDao(ConnectionMaker connectionMaker) {
+        this.connectionMaker = connectionMaker;
     }
 
     public void add(User user){
         try{
             //jdbc 로드
-            Connection c = abstractUserDao.makeConnection();
+            Connection c = connectionMaker.makeConnection();
             //2. 쿼리 작성
             PreparedStatement ps = c.prepareStatement("INSERT INTO users values(?,?,?)");
             ps.setString(1, user.getId());
@@ -39,7 +39,7 @@ public class UserDao {
         User user;
 
         try{
-            Connection c = abstractUserDao.makeConnection();
+            Connection c = connectionMaker.makeConnection();
 
             PreparedStatement pstmt = c.prepareStatement("select * from users where id = ?");
 
@@ -63,7 +63,7 @@ public class UserDao {
     public List<User> findAll(){
         List<User> userList = new ArrayList<>();
         try {
-            Connection c = abstractUserDao.makeConnection();
+            Connection c = connectionMaker.makeConnection();
 
             Statement statement = c.createStatement();
 
@@ -85,7 +85,7 @@ public class UserDao {
     }
 
     public static void main(String[] args) {
-        UserDao userDao = new UserDao(new AwsUserDao());
+        UserDao userDao = new UserDao(new AwsConnectionMaker());
         //Constructor로 user 추가
         userDao.add(new User("5", "유재석", "12345677"));
 

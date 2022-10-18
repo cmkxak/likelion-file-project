@@ -5,7 +5,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Map;
 
-public class AwsUserDao extends UserDaoAbstract{
+public class AwsConnectionMaker implements ConnectionMaker{
     @Override
     public Connection makeConnection() throws ClassNotFoundException, SQLException {
         String jdbcDriver = "com.mysql.cj.jdbc.Driver";
