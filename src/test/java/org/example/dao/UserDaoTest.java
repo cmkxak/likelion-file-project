@@ -1,6 +1,5 @@
 package org.example.dao;
 
-import org.example.connection.ConnectionMaker;
 import org.example.domain.User;
 import org.junit.jupiter.api.Test;
 
@@ -10,7 +9,7 @@ class UserDaoTest {
     @Test
     void addAndSelect(){
         //given
-        UserDao userDao = new UserDao(new ConnectionMaker());
+        UserDao userDao = new UserDao();
         User user = new User("4", "정준하", "1231231313");
 
         //when
