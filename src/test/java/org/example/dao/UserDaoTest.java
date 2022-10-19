@@ -9,8 +9,8 @@ class UserDaoTest {
     @Test
     void addAndSelect(){
         //given
-        UserDao userDao = new UserDao();
-        User user = new User("4", "정준하", "1231231313");
+        UserDao userDao = new UserDaoFactory().awsUserDao();
+        User user = new User("6", "정준하", "1231231313");
 
         //when
         userDao.add(user);
