@@ -1,5 +1,6 @@
 package org.example.dao;
 
+import org.example.connection.ConnectionMaker;
 import org.example.domain.User;
 
 import java.sql.*;
@@ -84,15 +85,15 @@ public class UserDao {
         return userList;
     }
 
-    public static void main(String[] args) {
-        UserDao userDao = new UserDao(new AwsConnectionMaker());
-        //Constructor로 user 추가
-        userDao.add(new User("5", "유재석", "12345677"));
+    public int getCount() throws SQLException, ClassNotFoundException {
+        Connection connection = connectionMaker.makeConnection();
 
-        List<User> allofUser = userDao.findAll();
-        for (User user : allofUser) {
-            System.out.println(user.getName());
-        }
+        PreparedStatement pstmt = connection.prepareStatement("SELECT count(users) as cnt from users");
 
+        int result = pstmt.executeUpdate();
+        return result;
+    }
+
+    public void deleteAll(){
     }
 }
